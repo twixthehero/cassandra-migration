@@ -282,6 +282,8 @@ class CassandraMigration : CassandraMigrationConfiguration {
                     }));
                 }
                 builder.withKeyspace(keyspaceConfig.name)
+                //todo(max) figure out correct place to pull auth credentials from
+                builder.withAuthCredentials("cassandra", "cassandra")
                 session = builder.build()
 
                 LOG.info(getConnectionInfo(session))

@@ -61,7 +61,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                             select.whereColumn("space").isEqualTo(QueryBuilder.bindMarker())
                                     .whereColumn("key").isEqualTo(QueryBuilder.bindMarker());
 //                            select.where(Relation.column("space").isEqualTo(QueryBuilder.literal("web"))).eq("space", "web")).and(eq("key", "facebook"))
-                            val row = getSession().execute(select.build("web","facebook")).one()
+                            val row = getKeyspaceSession().execute(select.build("web","facebook")).one()
                             row?.getString("value") shouldBe "facebook.com"
                         }
                         "3.0" -> {
@@ -75,7 +75,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
 
 //                            select.where(eq("space", "web")).and(eq("key", "google"))
 
-                            val row = getSession().execute(select.build("web","google")).one()
+                            val row = getKeyspaceSession().execute(select.build("web","google")).one()
                             row?.getString("value") shouldBe "google.com"
                         }
                         "2.0.0" -> {
@@ -87,7 +87,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                                     .column("title")
                                     .column("message")
                             select.whereColumn("id").isEqualTo(QueryBuilder.literal(1))
-                            val row = getSession().execute(select.build()).one()
+                            val row = getKeyspaceSession().execute(select.build()).one()
                             row?.getString("title") shouldBe "foo"
                             row?.getString("message") shouldBe "meh"
                         }
@@ -97,7 +97,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                             info.script should have substring ".cql"
 
                             val select = QueryBuilder.selectFrom("test2").all()
-                            shouldThrow<InvalidQueryException> { getSession().execute(select.build()) }
+                            shouldThrow<InvalidQueryException> { getKeyspaceSession().execute(select.build()) }
                         }
                         "1.1.0" -> {
                             info.description shouldBe "First create temp"
@@ -105,7 +105,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                             info.script should have substring ".cql"
 
                             val select = QueryBuilder.selectFrom("test2").all()
-                            shouldThrow<InvalidQueryException> { getSession().execute(select.build()) }
+                            shouldThrow<InvalidQueryException> { getKeyspaceSession().execute(select.build()) }
                         }
                         "1.0.0" -> {
                             info.description shouldBe "First"
@@ -116,7 +116,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                                     .whereColumn("space").isEqualTo(QueryBuilder.bindMarker())
                                     .whereColumn("key").isEqualTo(QueryBuilder.bindMarker())
 //                            select.where(eq("space", "foo")).and(eq("key", "blah"))
-                            val row = getSession().execute(select.build("foo","blah")).one()
+                            val row = getKeyspaceSession().execute(select.build("foo","blah")).one()
                             row?.getString("value") shouldBe "profit!"
                         }
                     }

@@ -39,27 +39,27 @@ open class BaseKIT : FreeSpec() {
     /** Keyspace name from configuration */
     val CASSANDRA_KEYSPACE: String =
             conf.extract<String?>(ConfigurationProperty.KEYSPACE_NAME.namespace)
-                ?: "cassandra_migration_test"
+                    ?: "cassandra_migration_test"
 
     /** Cluster contact point(s) from configuration */
     val CASSANDRA_CONTACT_POINT: String =
             conf.extract<String?>(ConfigurationProperty.CONTACT_POINTS.namespace)
-                ?: "localhost"
+                    ?: "localhost"
 
     /** Cluster connection port from configuration */
     val CASSANDRA_PORT: Int =
             conf.extract<Int?>(ConfigurationProperty.PORT.namespace)
-                ?: 9147
+                    ?: 9147
 
     /** Cluster credentials username */
     val CASSANDRA_USERNAME: String =
             conf.extract<String?>(ConfigurationProperty.USERNAME.namespace)
-                ?: "cassandra"
+                    ?: "cassandra"
 
     /** Cluster credentials password */
     val CASSANDRA_PASSWORD: String =
             conf.extract<String?>(ConfigurationProperty.PASSWORD.namespace)
-                ?: "cassandra"
+                    ?: "cassandra"
 
     /**
      * Flag to disable embedded Cassandra.
@@ -68,10 +68,13 @@ open class BaseKIT : FreeSpec() {
      */
     val DISABLE_EMBEDDED: Boolean =
             conf.extract<Boolean?>("cassandra.migration.disable_embedded")
-                ?: false
+                    ?: false
 
     /** Cluster connection session */
     private var session: CqlSession? = null
+
+    /** Cluster connection session */
+    private var keyspaceSession: CqlSession? = null
 
     /**
      * Start embedded Cassandra before all tests are run.
@@ -116,7 +119,7 @@ open class BaseKIT : FreeSpec() {
                  | };
                 """.trimMargin()
         val statement = SimpleStatement.builder(cql)
-        getSession(CASSANDRA_USERNAME,CASSANDRA_PASSWORD).execute(statement.build())
+        getSession(CASSANDRA_USERNAME, CASSANDRA_PASSWORD).execute(statement.build())
 
         // Reconnect session to the keyspace
 //        session = session!!.cluster.connect(CASSANDRA_KEYSPACE)
@@ -131,7 +134,7 @@ open class BaseKIT : FreeSpec() {
 
         val cql = """DROP KEYSPACE ${CASSANDRA_KEYSPACE};"""
         val statement = SimpleStatement.builder(cql)
-        getSession(CASSANDRA_USERNAME,CASSANDRA_PASSWORD).execute(statement.build())
+        getSession(CASSANDRA_USERNAME, CASSANDRA_PASSWORD).execute(statement.build())
     }
 
     /**
@@ -158,22 +161,36 @@ open class BaseKIT : FreeSpec() {
 //        val username = keyspaceConfig.clusterConfig.username
 //        val password = keyspaceConfig.clusterConfig.password
         val builder = CqlSession.builder()
-                .withAuthCredentials(username,password)
-                .addContactPoint(InetSocketAddress(CASSANDRA_CONTACT_POINT,CASSANDRA_PORT))
+                .addContactPoint(InetSocketAddress(CASSANDRA_CONTACT_POINT, CASSANDRA_PORT))
+                .withLocalDatacenter("datacenter1")
+                .withAuthCredentials(username, password)
 
 //        builder.addContactPoints(CASSANDRA_CONTACT_POINT)
 //                .withPort(CASSANDRA_PORT)
 //                .withCredentials(username, password)
 //        val cluster = builder.build()
 //        session = cluster.connect()
-        return builder.build()
+        session = builder.build()
+        return session!!
+    }
+
+    protected fun getSession(): CqlSession {
+        return session!!
     }
 
     /**
      * Get the active connection session.
      */
-    protected fun getSession(): CqlSession {
-        return session!!
+    protected fun getKeyspaceSession(): CqlSession {
+        if (keyspaceSession != null && !keyspaceSession!!.isClosed)
+            return keyspaceSession!!
+        val builder = CqlSession.builder()
+                .addContactPoint(InetSocketAddress(CASSANDRA_CONTACT_POINT, CASSANDRA_PORT))
+                .withLocalDatacenter("datacenter1")
+                .withAuthCredentials(CASSANDRA_USERNAME, CASSANDRA_PASSWORD)
+                .withKeyspace(CASSANDRA_KEYSPACE)
+        keyspaceSession = builder.build()
+        return keyspaceSession!!
     }
 
 }

@@ -31,6 +31,7 @@ import com.hhandoko.cassandra.migration.internal.metadatatable.AppliedMigration
 import com.hhandoko.cassandra.migration.internal.util.StopWatch
 import com.hhandoko.cassandra.migration.internal.util.TimeFormat
 import com.hhandoko.cassandra.migration.internal.util.logging.LogFactory
+import java.util.*
 
 /**
  * Main workflow for migrating the database.
@@ -167,6 +168,7 @@ class Migrate(
                             migration.type,
                             migration.script,
                             migration.checksum,
+                            Date(),
                             user,
                             executionTime.toInt(),
                             success

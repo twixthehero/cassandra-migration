@@ -25,6 +25,7 @@ import com.hhandoko.cassandra.migration.internal.metadatatable.AppliedMigration
 import com.hhandoko.cassandra.migration.internal.resolver.ResolvedMigrationImpl
 import io.kotlintest.matchers.have
 import io.kotlintest.specs.FreeSpec
+import java.util.*
 
 /**
  * MigrationInfoSpec unit tests.
@@ -55,7 +56,7 @@ class MigrationInfoSpec : FreeSpec() {
      * @return The applied migration.
      */
     fun createAppliedMigration(): AppliedMigration {
-        return AppliedMigration(version, description, type, null, 123, "testUser", 0, success = true)
+        return AppliedMigration(version, description, type, null, 123, Date(), "testUser", 0, success = true)
     }
 
     init {

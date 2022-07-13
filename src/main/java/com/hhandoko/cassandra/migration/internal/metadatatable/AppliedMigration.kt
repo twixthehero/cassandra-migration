@@ -152,6 +152,7 @@ class AppliedMigration : Comparable<AppliedMigration> {
         type: MigrationType,
         script: String?,
         checksum: Int?,
+        installedOn: Date,
         installedBy: String,
         executionTime: Int,
         success: Boolean
@@ -161,6 +162,7 @@ class AppliedMigration : Comparable<AppliedMigration> {
         this.type = type
         this.script = abbreviateScript(script)
         this.checksum = checksum
+        this.installedOn = installedOn
         this.installedBy = installedBy
         this.executionTime = executionTime
         this.isSuccess = success
