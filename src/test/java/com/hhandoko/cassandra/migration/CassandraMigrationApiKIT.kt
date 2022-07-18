@@ -58,7 +58,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                             info.script should have substring ".java"
 
                             val select = QueryBuilder.selectFrom("test1").column("value")// QueryBuilder.select().column("value").from("test1")
-                            select.whereColumn("space").isEqualTo(QueryBuilder.bindMarker())
+                                    .whereColumn("space").isEqualTo(QueryBuilder.bindMarker())
                                     .whereColumn("key").isEqualTo(QueryBuilder.bindMarker());
 //                            select.where(Relation.column("space").isEqualTo(QueryBuilder.literal("web"))).eq("space", "web")).and(eq("key", "facebook"))
                             val row = getKeyspaceSession().execute(select.build("web","facebook")).one()
@@ -83,7 +83,7 @@ class CassandraMigrationApiKIT : BaseKIT() {
                             info.type.name shouldBe MigrationType.CQL.name
                             info.script should have substring ".cql"
 
-                            val select = QueryBuilder.selectFrom("content")
+                            val select = QueryBuilder.selectFrom("contents")
                                     .column("title")
                                     .column("message")
                             select.whereColumn("id").isEqualTo(QueryBuilder.literal(1))

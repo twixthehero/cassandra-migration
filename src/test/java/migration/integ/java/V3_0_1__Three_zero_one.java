@@ -11,7 +11,7 @@ public class V3_0_1__Three_zero_one implements JavaMigration {
 
         session.execute(QueryBuilder.insertInto("test1")
                 .value("space",QueryBuilder.literal("web"))
-                .value("key",QueryBuilder.literal("google"))
+                .value("key",QueryBuilder.literal("facebook"))
                 .value("value",QueryBuilder.literal( "facebook.com")).build());
 
 //        Insert insert = QueryBuilder.insertInto("test1");

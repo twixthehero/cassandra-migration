@@ -35,7 +35,7 @@ public class FileSystemLocationScannerMediumTest {
     @Test
     public void findResourceNamesFromFileSystem() throws Exception {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        String path = UrlUtils.toFilePath(classLoader.getResources("migration").nextElement()) + File.separator;
+        String path = UrlUtils.toFilePath(classLoader.getResources("scripts").nextElement()) + File.separator;
 
         Set<String> resourceNames =
                 new FileSystemClassPathLocationScanner().findResourceNamesFromFileSystem(path, "cql", new File(path, "cql"));

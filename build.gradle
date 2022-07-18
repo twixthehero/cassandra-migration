@@ -30,7 +30,7 @@ dependencies {
     compile group: 'com.datastax.oss', name: 'java-driver-core', version: '4.7.2'
     compile group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.7.2'
     compile group: 'com.typesafe', name: 'config', version:'1.2.1'
-    compile group: 'io.github.config4k', name: 'config4k', version:'0.3.0'
+    compile files('libs/config4k.jar')
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'2.7.22'
     testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version:'1.4.0'
