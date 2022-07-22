@@ -154,6 +154,7 @@ open class BaseKIT : FreeSpec() {
      * Get the active connection session.
      */
     protected fun getSession(username: String, password: String): CqlSession {
+        System.setProperty("datastax-java-driver.basic.request.timeout", "5 seconds");
         if (session != null && !session!!.isClosed)
             return session!!
 
@@ -175,6 +176,7 @@ open class BaseKIT : FreeSpec() {
     }
 
     protected fun getSession(): CqlSession {
+        System.setProperty("datastax-java-driver.basic.request.timeout", "5 seconds");
         return session!!
     }
 
@@ -182,6 +184,7 @@ open class BaseKIT : FreeSpec() {
      * Get the active connection session.
      */
     protected fun getKeyspaceSession(): CqlSession {
+        System.setProperty("datastax-java-driver.basic.request.timeout", "5 seconds");
         if (keyspaceSession != null && !keyspaceSession!!.isClosed)
             return keyspaceSession!!
         val builder = CqlSession.builder()

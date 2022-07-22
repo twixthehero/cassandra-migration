@@ -63,7 +63,7 @@ class ValidateKIT : BaseKIT() {
                 "for external session, but keyspace setup via configuration" {
                     // apply migration scripts
                     val scriptsLocations = arrayOf("migration/integ", "migration/integ/java")
-                    val session = getSession()
+                    val session = getKeyspaceSession()
                     var cm = CassandraMigration()
                     cm.locations = scriptsLocations
                     cm.keyspaceConfig = getKeyspace()
@@ -92,10 +92,14 @@ class ValidateKIT : BaseKIT() {
 
                 "for external session and defaulted keyspace" {
                     // apply migration scripts
+                    /* session with defaulted keyspace doesnt work, seems
+                        cassandra 4.* allows setting keyspace only
+                        at creation time, so provided keyspace */
                     val scriptsLocations = arrayOf("migration/integ", "migration/integ/java")
-                    val session = getSession()
+                    val session = getKeyspaceSession()
                     var cm = CassandraMigration()
                     cm.locations = scriptsLocations
+                    cm.keyspaceConfig = getKeyspace()
                     cm.migrate(session)
 
                     val infoService = cm.info(session)

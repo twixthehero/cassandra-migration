@@ -49,6 +49,8 @@ class CassandraMigrationCommandLineKIT : BaseKIT() {
                         input.forEachLine {
                             if (it.contains("Successfully applied 4 migration(s)"))
                                 success()
+                            if (it.contains("is up to date, no migration necessary"))
+                                success() //when cassandra is already at latest version
                             println(it)
                         }
                     } catch (e: IOException) {
